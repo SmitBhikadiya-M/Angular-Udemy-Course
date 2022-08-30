@@ -12,6 +12,9 @@ export class ServersComponent implements OnInit {
   serverCreated = false;
   username = '';
   servers = ['TestServer', 'ProductionServer'];
+
+  displayDetails = false;
+  clickLogs = [];
   constructor() { 
     setTimeout(()=>{
       this.allowNewServer = false;
@@ -29,6 +32,11 @@ export class ServersComponent implements OnInit {
 
   onUpdateServerName(event: Event) {
     this.serverName = (<HTMLInputElement>event.target).value;
+  }
+
+  toggleDetails(){
+    this.displayDetails = !this.displayDetails;
+    this.clickLogs.push(`Details ${this.displayDetails ? 'hide' : 'show'}, at ${new Date()}`);
   }
 
 }
