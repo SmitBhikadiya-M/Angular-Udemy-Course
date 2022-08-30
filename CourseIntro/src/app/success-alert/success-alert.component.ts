@@ -12,6 +12,7 @@ import { Component, OnInit } from '@angular/core';
             color: #155724;
             border-radius: 5px;
             background-color: #d4edda;
+            margin: 10px auto;
         }
     `]
 })

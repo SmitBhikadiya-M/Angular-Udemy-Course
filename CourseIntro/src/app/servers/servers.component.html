@@ -9,7 +9,8 @@
     <button class="btn btn-primary" [disabled]="allowNewServer" (click)="onCreateServer()">
         Add Server
     </button>
-    <p>{{ serverCreationStatus }}</p>
+    <p *ngIf="serverCreated; else noServer">Server was create with {{ serverName }}</p>
+    <ng-template #noServer><p>No Server was created</p></ng-template>
 </div>
 
 <div class="container-fluid">
@@ -20,5 +21,4 @@
 </div>
 
 <hr>
-<app-server></app-server>
-<app-server></app-server>
+<app-server *ngFor="let server of servers"></app-server>

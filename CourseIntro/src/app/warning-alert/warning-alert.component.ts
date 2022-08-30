@@ -12,6 +12,7 @@ import { Component } from "@angular/core";
             color: #721c24;
             border-radius: 5px;
             background-color: #f8d7da;
+            margin: 10px auto;
         }
     `]
 })
