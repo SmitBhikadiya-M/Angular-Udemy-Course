@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <label>Server Name</label>
+    <!-- <input type="text"
+    class="form-control"
+    (input)="onUpdateServerName($event)"
+> -->
+    <input type="text" class="form-control" [(ngModel)]="serverName">
+    <p>{{ serverName }}</p>
+    <button class="btn btn-primary" [disabled]="allowNewServer" (click)="onCreateServer()">
+        Add Server
+    </button>
+    <p *ngIf="serverCreated; else noServer">Server was create with {{ serverName }}</p>
+    <ng-template #noServer><p>No Server was created</p></ng-template>
+</div>
+
+<div class="container-fluid">
+    <!--- Assignment 2: Practicing Databinding --->
+    <input type="text" class="form-control" [(ngModel)]="username">
+    <p> Username is {{ username }} </p>
+    <button class="btn btn-primary" [disabled]="username===''" (click)="username = ''"> Reset Input </button>
+</div>
+
+<hr>
+<app-server *ngFor="let server of servers"></app-server>
+
+<br><br>
+<hr>
+
+<div class="container-fluid">
+    <h3>Assignment-3: Practicing Directives</h3>
+    <div>
+        <button class="btn btn-primary" [innerText]="!displayDetails ? 'Show Details' : 'Hide Details'" (click)="toggleDetails()"></button>
+        <p [ngStyle]=" { display: displayDetails ? 'block' : 'none' } ">{{ 'secret password ****XYZ' }}</p>
+        <ul>
+            <li *ngFor="let log of clickLogs; let i=index" [ngStyle]="{ color: i+1 >= 5 ? 'blue' : 'inherit' }">{{ i+1 }}. {{ log }}</li>
+        </ul>
+    </div>
+</div>
