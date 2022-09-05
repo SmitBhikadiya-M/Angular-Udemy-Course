@@ -7,7 +7,7 @@
       > Only Show odd Numbers </button>
       <br><br>
       <ul class="list-group">
-        <div *ngIf="onlyOdd">
+        <!-- <div *ngIf="onlyOdd">
           <li 
             class="list-group-item"
             *ngFor="let odd of oddNumbers"
@@ -18,6 +18,14 @@
             class="list-group-item"
             *ngFor="let even of evenNumbers"
            >{{ even }}</li>
+        </div> -->
+        <div *appUnless="onlyOdd">
+          <li 
+            class="list-group-item"
+            *ngFor="let odd of oddNumbers"
+          >
+            {{ odd }}
+          </li>
         </div>
       </ul>
       <p appBasicHighlight >My Custom Directive</p>
