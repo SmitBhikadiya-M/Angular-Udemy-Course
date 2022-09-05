@@ -1,5 +1,5 @@
 <div class="container" style="margin-top: 10px;">
-  <app-cockpit (serverCreated)="onServerAdded($event)" (blueprintCreated)="onBlueprintAdded($event)"></app-cockpit>
+  <!-- <app-cockpit (serverCreated)="onServerAdded($event)" (blueprintCreated)="onBlueprintAdded($event)"></app-cockpit>
   <hr>
   <div class="row">
     <div class="col-xs-12">
@@ -11,6 +11,21 @@
           <em *ngIf="serverElement.type === 'blueprint'">{{ serverElement.content }}</em>
         </p>
       </app-server-element>
+    </div>
+  </div> -->
+  <hr>
+  <div class="row">
+    <div class="col-xs-12">
+      <h3>Assignment-4: Practicing Data & Event Binding</h3>
+      <app-game-control  (intervalFired)="onFiredInterval($event)"></app-game-control>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-6">
+      <app-even *ngFor="let even of evenNumbers" [number]="even"></app-even>
+    </div>
+    <div class="col-xs-6">
+      <app-odd *ngFor="let odd of oddNumbers" [number]="odd"></app-odd>
     </div>
   </div>
 </div>
