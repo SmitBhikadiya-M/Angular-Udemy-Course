@@ -6,5 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'CourseProject';
+  selectedNav:any = 'recipe';
+
+  onNavSelectEvent(e: Event){
+   this.selectedNav = e; 
+   console.log(this.selectedNav);
+   
+  }
 }
