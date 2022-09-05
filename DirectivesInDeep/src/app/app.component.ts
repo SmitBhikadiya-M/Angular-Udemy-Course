@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'DirectivesInDeep';
+  numbers: number[] = [1,2,3,4,5];
+  oddNumbers: number[] = [1,3,5];
+  evenNumbers: number[] = [2,4]
+  onlyOdd = false;
 }
