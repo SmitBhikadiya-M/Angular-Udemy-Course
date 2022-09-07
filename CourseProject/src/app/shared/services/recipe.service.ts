@@ -9,11 +9,11 @@ export class RecipeService{
     recipeSelected = new EventEmitter<Recipe>();
     
     private recipes: Recipe[] = [
-        new Recipe('A Test Recipe 1', 'This is simply test', 'assets/img/pizza_recipe.jpeg', [
+        new Recipe(1, 'A Test Recipe 1', 'This is simply test', 'assets/img/pizza_recipe.jpeg', [
             new Ingredient('Meat', 1),
             new Ingredient('French Frices', 20)
         ]),
-        new Recipe('A Test Recipe 2', 'This is simply test', 'assets/img/pizza_recipe.jpeg', [
+        new Recipe(2, 'A Test Recipe 2', 'This is simply test', 'assets/img/pizza_recipe.jpeg', [
             new Ingredient('Buns', 10),
             new Ingredient('eggs', 20)
         ]),
@@ -21,6 +21,12 @@ export class RecipeService{
 
     getRecipies(){
         return this.recipes.slice();
+    }
+
+    getRecipeById(id: number){
+        return this.recipes.find((recipe)=>{
+            return recipe.id === id;
+        });
     }
 
 }
