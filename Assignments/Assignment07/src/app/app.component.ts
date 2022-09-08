@@ -32,19 +32,35 @@ export class AppComponent implements OnInit {
     return null;
   }
 
+  // asyncCustomProjectNameValidator(control: FormControl): Promise<{ 'isNameForbidden': boolean } | null> | Observable<any> {
+  //   const promise = new Promise<any>((resolve, reject) => {
+  //     setTimeout(() => {
+  //       if (control.value === "Test") {
+  //         resolve({
+  //           isNameForbidden: true
+  //         })
+  //       } else {
+  //         resolve(null);
+  //       }
+  //     }, 1500)
+  //   });
+  //   return promise;
+  // }
+
   asyncCustomProjectNameValidator(control: FormControl): Promise<{ 'isNameForbidden': boolean } | null> | Observable<any> {
-    const promise = new Promise<any>((resolve, reject) => {
+    const observable = new Observable<any>((observer) => {
       setTimeout(() => {
         if (control.value === "Test") {
-          resolve({
+          observer.next({
             isNameForbidden: true
           })
         } else {
-          resolve(null);
+          observer.next(null);
         }
+        observer.complete();
       }, 1500)
     });
-    return promise;
+    return observable;
   }
 
 }
