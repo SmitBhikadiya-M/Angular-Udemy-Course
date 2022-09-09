@@ -4,6 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Recipe } from 'src/app/shared/models/recipe.model';
 import { RecipeService } from 'src/app/shared/services/recipe.service';
+import { ShoppingListService } from 'src/app/shared/services/shopping-list.service';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -19,6 +20,7 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute, 
     private recipeService: RecipeService,
+    private shoppingService: ShoppingListService,
     private router: Router  
   ) { }
 
@@ -87,14 +89,13 @@ export class RecipeEditComponent implements OnInit, OnDestroy {
     }))
   }
 
-  onDeleteRecipe(){
+  onCancelRecipe(){
     if(this.editMode){
-      this.recipeService.deleteRecipe(this.id);
       this.router.navigate(['/recipes']);
     }else{
-      this.onResetForm();
       this.router.navigate(['../'], { relativeTo : this.route });
     }
+    this.onResetForm();
   }
 
   removeIngredient(index: number){
