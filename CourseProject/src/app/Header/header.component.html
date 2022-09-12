@@ -30,7 +30,7 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a style="cursor: pointer" *ngIf="isUserLoggin">Logout</a>
+          <a style="cursor: pointer" *ngIf="isUserLoggin" (click)="onLogout()">Logout</a>
         </li>
         <li class="dropdown" appDropdown *ngIf="isUserLoggin">
           <a class="dropdown-toggle" role="button"
