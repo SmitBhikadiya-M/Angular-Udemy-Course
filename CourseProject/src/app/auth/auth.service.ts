@@ -21,14 +21,14 @@ export interface AuthResponseData {
 export class AuthService {
     private signupEndpoint = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.firebaseApiKey}`;
     private singinEndpoint = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${environment.firebaseApiKey}`
-    private autoLogoutTimer:any;
+    private autoLogoutTimer: any;
     userSubject = new BehaviorSubject<User>(null);
     token: string = null;
 
     constructor(
         private http: HttpClient,
         private router: Router
-        ) { }
+    ) { }
 
     signUp(email: string, password: string) {
         return this.http.post<AuthResponseData>(
@@ -69,12 +69,12 @@ export class AuthService {
             _token: string,
             _tokenExpirationDate: string
         } = JSON.parse(localStorage.getItem('userData'));
-        if(!userData){
+        if (!userData) {
             return;
         }
-        const loadedUser = new User( userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate))
-    
-        if(loadedUser.token){
+        const loadedUser = new User(userData.email, userData.id, userData._token, new Date(userData._tokenExpirationDate))
+
+        if (loadedUser.token) {
             this.userSubject.next(loadedUser);
             const curr_time = new Date().getTime();
             const expi_time = new Date(userData._tokenExpirationDate).getTime();
@@ -82,18 +82,18 @@ export class AuthService {
         }
     }
 
-    logut(){
+    logut() {
         this.userSubject.next(null);
-        localStorage.clear();
-        this.router.navigate(['/'])
-        if(this.autoLogoutTimer){
+        this.router.navigate(['/auth']);
+        localStorage.removeItem('userData');
+        if (this.autoLogoutTimer) {
             clearTimeout(this.autoLogoutTimer);
         }
         this.autoLogoutTimer = null;
     }
 
-    autoLogout(expirationDuration: number){
-       this.autoLogoutTimer = setTimeout(()=>{
+    autoLogout(expirationDuration: number) {
+        this.autoLogoutTimer = setTimeout(() => {
             this.logut();
         }, expirationDuration)
     }
