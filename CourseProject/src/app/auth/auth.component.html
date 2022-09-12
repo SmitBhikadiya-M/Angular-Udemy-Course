@@ -1,6 +1,9 @@
 <div class="row">
-  <div class="col-xs-12 col-md-6 col-md-offset-3">
-    <form #authForm="ngForm" (submit)="onSubmit()">
+  <div class="col-xs-12 col-md-6 col-md-offset-3" [ngStyle]="{ textAlign: isLoading ? 'center' : 'inherit' }">
+    <div class="alert alert-danger" *ngIf="error">
+      <p>{{ error }}</p>
+    </div>
+    <form #authForm="ngForm" (submit)="onSubmit()" *ngIf=" !isLoading else loadingSpinner">
       <div class="form-group">
         <label for="email">Email</label>
         <input 
@@ -36,5 +39,8 @@
         </button>
       </div>
     </form>
+    <ng-template #loadingSpinner>
+      <app-loading-spinner></app-loading-spinner>
+    </ng-template>
   </div>
 </div>
