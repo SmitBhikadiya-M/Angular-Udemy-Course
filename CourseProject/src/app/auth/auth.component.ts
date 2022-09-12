@@ -25,6 +25,10 @@ export class AuthComponent {
         this.isLoggingMode = !this.isLoggingMode;
     }
 
+    onHandleError(){
+        this.error = null;
+    }
+
     onSubmit(){
         this.isLoading = true;
         this.error = null;
