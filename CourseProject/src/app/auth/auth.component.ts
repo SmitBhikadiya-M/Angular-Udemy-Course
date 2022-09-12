@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { AuthResponseData, AuthService } from "./auth.service";
 
@@ -15,7 +16,10 @@ export class AuthComponent {
     @ViewChild('authForm') authForm: NgForm;
 
 
-    constructor( private authService: AuthService ) { }
+    constructor( 
+        private authService: AuthService,
+        private router: Router
+        ) { }
 
     onSwitchMode() {
         this.isLoggingMode = !this.isLoggingMode;
@@ -42,6 +46,7 @@ export class AuthComponent {
             next: (res)=>{
                 console.log(res);
                 this.isLoading = false;
+                this.router.navigate(['/recipes'])
             },
             error: (err)=>{
                 this.error = err; 

@@ -1,6 +1,7 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable, OnInit } from "@angular/core";
-import { map, tap } from "rxjs";
+import { exhaustMap, map, take, tap } from "rxjs";
+import { AuthService } from "src/app/auth/auth.service";
 import { Recipe } from "../models/recipe.model";
 import { RecipeService } from "./recipe.service";
 
@@ -13,7 +14,8 @@ export class DataStorageService {
 
     constructor(
         private http: HttpClient,
-        private recipeService: RecipeService
+        private recipeService: RecipeService,
+        private authService: AuthService
     ) { }
 
     storeRecipes() {
@@ -32,16 +34,17 @@ export class DataStorageService {
     }
 
     fetchRecipes() {
-        return this.http.get<Recipe[]>(`${this.recipeApiUrl}/recipes.json`)
-            .pipe(
-                map((recipes: Recipe[]) => {
-                    return recipes.map((recipe) => {
-                        return { ...recipe, ingredients: recipe.ingredients ? recipe.ingredients : [] }
-                    });
-                }),
-                tap((recipes: Recipe[]) => {
-                    this.recipeService.setFetchedRecipe(recipes);
-                })
-            )
+        return this.http.get<Recipe[]>(
+            `${this.recipeApiUrl}/recipes.json`
+        ).pipe(
+            map((recipes: Recipe[]) => {
+                return recipes.map((recipe) => {
+                    return { ...recipe, ingredients: recipe.ingredients ? recipe.ingredients : [] }
+                });
+            }),
+            tap((recipes: Recipe[]) => {
+                this.recipeService.setFetchedRecipe(recipes);
+            })
+        );
     }
 }
