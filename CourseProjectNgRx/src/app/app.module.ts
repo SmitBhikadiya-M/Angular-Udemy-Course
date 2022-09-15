@@ -1,37 +1,26 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http'
+import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './Header/header.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AppRoutingModule } from './app-routing.model';
-import { AuthComponent } from './auth/auth.component';
-import { AuthInterseptorService } from './auth/auth-interseptor.service';
-import { RecipesModule } from './recipes/recipes.module';
-import { ShoppingListModule } from './shopping-list/shopping-list.module';
+import { HeaderComponent } from './header/header.component';
+import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
-import { AuthModule } from './auth/auth.module';
+import { CoreModule } from './core.module';
+import * as fromApp from './store/app.reducer';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-  ],
+  declarations: [AppComponent, HeaderComponent],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     HttpClientModule,
+    AppRoutingModule,
+    StoreModule.forRoot(fromApp.appReducer),
     SharedModule,
-    AuthModule
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterseptorService,
-      multi: true
-    }
+    CoreModule
   ],
   bootstrap: [AppComponent]
+  // providers: [LoggingService]
 })
-export class AppModule { }
+export class AppModule {}

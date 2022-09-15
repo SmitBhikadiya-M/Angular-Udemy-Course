@@ -1,8 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+
+import { Ingredient } from '../shared/ingredient.model';
 import { LoggingService } from '../logging.service';
-import { Ingredient } from '../shared/models/ingredient.model';
-import { ShoppingListService } from '../shared/services/shopping-list.service';
+import * as ShoppingListActions from './store/shopping-list.actions';
+import * as fromApp from '../store/app.reducer';
 
 @Component({
   selector: 'app-shopping-list',
@@ -10,30 +13,32 @@ import { ShoppingListService } from '../shared/services/shopping-list.service';
   styleUrls: ['./shopping-list.component.css']
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
-
-  ingredients: Ingredient[];
-  private igChangeSub: Subscription;
+  ingredients: Observable<{ ingredients: Ingredient[] }>;
+  private subscription: Subscription;
 
   constructor(
-    private shoppingService: ShoppingListService,
-    private loggingService: LoggingService
-    ) {}
+    private loggingService: LoggingService,
+    private store: Store<fromApp.AppState>
+  ) {}
 
-  ngOnInit(): void {
-    this.igChangeSub = this.shoppingService.ingredientChanged.subscribe((data: Ingredient[])=>{
-      this.ingredients = data;
-    })
-    this.ingredients = this.shoppingService.getIngredients();
+  ngOnInit() {
+    this.ingredients = this.store.select('shoppingList');
+    // this.ingredients = this.slService.getIngredients();
+    // this.subscription = this.slService.ingredientsChanged.subscribe(
+    //   (ingredients: Ingredient[]) => {
+    //     this.ingredients = ingredients;
+    //   }
+    // );
 
-    this.loggingService.printLog("Calling From Shopping List Component");
+    this.loggingService.printLog('Hello from ShoppingListComponent ngOnInit!');
   }
 
-  ngOnDestroy(): void {
-    this.igChangeSub.unsubscribe();
+  onEditItem(index: number) {
+    // this.slService.startedEditing.next(index);
+    this.store.dispatch(new ShoppingListActions.StartEdit(index));
   }
 
-  onEditItem(index: number){
-    this.shoppingService.startedEditing.next(index);
+  ngOnDestroy() {
+    // this.subscription.unsubscribe();
   }
-
 }
