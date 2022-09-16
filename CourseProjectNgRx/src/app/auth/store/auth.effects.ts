@@ -33,7 +33,8 @@ const handleAuthentication = (
     email: email,
     userId: userId,
     token: token,
-    expirationDate: expirationDate
+    expirationDate: expirationDate,
+    redirect: true
   });
 };
 
@@ -65,7 +66,7 @@ export class AuthEffects {
       return this.http
         .post<AuthResponseData>(
           'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=' +
-            environment.firebaseApiKey,
+            environment.firebaseAPIKey,
           {
             email: signupAction.payload.email,
             password: signupAction.payload.password,
@@ -73,8 +74,8 @@ export class AuthEffects {
           }
         )
         .pipe(
-          tap(resData =>{
-            this.authService.autoLogout(+resData.expiresIn * 1000)
+          tap(resData => {
+            this.authService.setLogoutTimer(+resData.expiresIn * 1000);
           }),
           map(resData => {
             return handleAuthentication(
@@ -98,7 +99,7 @@ export class AuthEffects {
       return this.http
         .post<AuthResponseData>(
           'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' +
-            environment.firebaseApiKey,
+            environment.firebaseAPIKey,
           {
             email: authData.payload.email,
             password: authData.payload.password,
@@ -106,8 +107,8 @@ export class AuthEffects {
           }
         )
         .pipe(
-          tap(resData =>{
-            this.authService.autoLogout(+resData.expiresIn * 1000)
+          tap(resData => {
+            this.authService.setLogoutTimer(+resData.expiresIn * 1000);
           }),
           map(resData => {
             return handleAuthentication(
@@ -127,8 +128,10 @@ export class AuthEffects {
   @Effect({ dispatch: false })
   authRedirect = this.actions$.pipe(
     ofType(AuthActions.AUTHENTICATE_SUCCESS),
-    tap(() => {
-      this.router.navigate(['/']);
+    tap((authSuccessAction: AuthActions.AuthenticateSuccess) => {
+      if (authSuccessAction.payload.redirect) {
+        this.router.navigate(['/']);
+      }
     })
   );
 
@@ -154,13 +157,23 @@ export class AuthEffects {
       );
 
       if (loadedUser.token) {
-        this.authService.autoLogout( ( new Date(userData._tokenExpirationDate).getTime() - new Date().getTime() ) * 1000)
+        // this.user.next(loadedUser);
+        const expirationDuration =
+          new Date(userData._tokenExpirationDate).getTime() -
+          new Date().getTime();
+        this.authService.setLogoutTimer(expirationDuration);
         return new AuthActions.AuthenticateSuccess({
           email: loadedUser.email,
           userId: loadedUser.id,
           token: loadedUser.token,
-          expirationDate: new Date(userData._tokenExpirationDate)
+          expirationDate: new Date(userData._tokenExpirationDate),
+          redirect: false
         });
+
+        // const expirationDuration =
+        //   new Date(userData._tokenExpirationDate).getTime() -
+        //   new Date().getTime();
+        // this.autoLogout(expirationDuration);
       }
       return { type: 'DUMMY' };
     })
@@ -170,8 +183,8 @@ export class AuthEffects {
   authLogout = this.actions$.pipe(
     ofType(AuthActions.LOGOUT),
     tap(() => {
-      localStorage.removeItem('userData');
       this.authService.clearLogoutTimer();
+      localStorage.removeItem('userData');
       this.router.navigate(['/auth']);
     })
   );
