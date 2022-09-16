@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import * as fromApp from '../store/app.reducer';
@@ -14,14 +12,14 @@ export class AuthService {
     private store: Store<fromApp.AppState>
   ) {}
 
-  autoLogout(expirationDuration: number) {
+  setLogoutTimer(expirationDuration: number) {
     this.tokenExpirationTimer = setTimeout(() => {
-     this.store.dispatch( new AuthActions.Logout() )
+      this.store.dispatch(new AuthActions.Logout());
     }, expirationDuration);
   }
 
-  clearLogoutTimer(){
-    if(this.tokenExpirationTimer){
+  clearLogoutTimer() {
+    if (this.tokenExpirationTimer) {
       clearTimeout(this.tokenExpirationTimer);
       this.tokenExpirationTimer = null;
     }
