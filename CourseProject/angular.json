@@ -97,6 +97,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "CourseProject:build:production",
+            "firebaseProject": "ng-course-recipe-book-84001",
+            "firebaseHostingSite": "ng-course-recipe-book-84001"
+          }
         }
       }
     }
